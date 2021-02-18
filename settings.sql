@@ -1,2 +1,2 @@
-DROP DATABASE IF EXISTS django_mangos_auth;
-CREATE DATABASE django_mangos_auth;
+DROP DATABASE IF EXISTS "recuerdo_server";
+CREATE DATABASE "recuerdo_server";
