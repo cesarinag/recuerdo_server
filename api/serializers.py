@@ -3,6 +3,17 @@ from rest_framework import serializers
 
 from .models.mango import Mango
 from .models.user import User
+from .models.haiku import Haiku
+
+class HaikuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Haiku
+        fields = ('id', 'five1', 'seven', 'five2', 'created_at', 'owner')
+
+    # This create method will be used for model creation
+    def create(self, validated_data):
+        return get_haiku_model().objects.create_haiku(**validated_data)
+
 
 class MangoSerializer(serializers.ModelSerializer):
     class Meta:
