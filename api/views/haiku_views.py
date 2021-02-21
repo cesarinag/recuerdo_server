@@ -16,7 +16,7 @@ class Haiku(generics.ListCreateAPIView):
 
     def post(self, request):
         request.data['haiku']['owner'] = request.user.id
-        print(request.data)
+        # print(request.data)
         haiku = HaikuSerializer(data=request.data)
         if haiku.is_valid():
             h = haiku.save()
@@ -28,16 +28,25 @@ class Haiku(generics.ListCreateAPIView):
 class HaikuDetail(generics.RetrieveUpdateDestroyAPIView):
     def get(self, request, pk):
         haiku = get_object_or_404(Haiku, pk=pk)
+        if not request.user.id == haiku.owner.id:
+            raise PermissionDenied('Permissions Error: This is not your haiku.')
         data = HaikuSerializer(haiku).data
         return Response(data)
 
     def delete(self, request, pk):
         haiku = get_object_or_404(Haiku, pk=pk)
+        if not request.user.id == haiku.owner.id:
+            raise PermissionDenied('Permissions Error: This is not your haiku. Cannot delete')
         haiku.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def update(self, request, pk):
         haiku = get_object_or_404(Haiku, pk=pk)
+        request.data['haiku']['owner'] = request.user.id
+        # check that the user owns it
+        if not request.user.id == haiku.owner.id:
+            raise PermissionDenied('Permissions Error: This is not your haiku.')
+        # print(request.data)
         data = HaikuSerializer(haiku, data=request.data['haiku'])
         if data.is_valid():
             data.save()
