@@ -11,13 +11,13 @@ class Haiku(generics.ListCreateAPIView):
     def get(self, request):
         haikus = Haiku.objects.filter(owner=request.user.id)
         data = HaikuSerializer(haikus, many=True).data
-        return Response(data)
-        serializer_class = HaikuSerializer
+        return Response({ 'haikus': data })
 
+    serializer_class = HaikuSerializer
     def post(self, request):
         request.data['haiku']['owner'] = request.user.id
-        # print(request.data)
-        haiku = HaikuSerializer(data=request.data)
+        print(request.data)
+        haiku = HaikuSerializer(data=request.data['haiku'])
         if haiku.is_valid():
             h = haiku.save()
             return Response(haiku.data, status=status.HTTP_201_CREATED)
@@ -40,15 +40,15 @@ class HaikuDetail(generics.RetrieveUpdateDestroyAPIView):
         haiku.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    def update(self, request, pk):
+    def partial_update(self, request, pk):
         haiku = get_object_or_404(Haiku, pk=pk)
         request.data['haiku']['owner'] = request.user.id
         # check that the user owns it
         if not request.user.id == haiku.owner.id:
             raise PermissionDenied('Permissions Error: This is not your haiku.')
         # print(request.data)
-        data = HaikuSerializer(haiku, data=request.data['haiku'])
-        if data.is_valid():
-            data.save()
-            return Response(data.data)
+        h = HaikuSerializer(haiku, data=request.data['haiku'])
+        if h.is_valid():
+            h.save()
+            return Response(h.data)
         return Response(data.errors, status=status.HTTP_400_BAD_REQUEST)
