@@ -7,13 +7,13 @@ from django.middleware.csrf import get_token
 from ..models.haiku import Haiku
 from ..serializers import HaikuSerializer
 
-class Haiku(generics.ListCreateAPIView):
+class Haikus(generics.ListCreateAPIView):
+    serializer_class = HaikuSerializer
     def get(self, request):
         haikus = Haiku.objects.filter(owner=request.user.id)
         data = HaikuSerializer(haikus, many=True).data
         return Response({ 'haikus': data })
 
-    serializer_class = HaikuSerializer
     def post(self, request):
         request.data['haiku']['owner'] = request.user.id
         print(request.data)

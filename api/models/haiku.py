@@ -8,7 +8,7 @@ class Haiku(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     # tkes place of 'User'
-    owner = models.ForeignKey(get_user_model(), related_name='haiku', on_delete=models.CASCADE)
+    owner = models.ForeignKey(get_user_model(), related_name='haikus', on_delete=models.CASCADE)
     # objects = models.Manager()
 
     def __str__(self):

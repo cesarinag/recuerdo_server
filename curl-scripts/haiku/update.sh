@@ -1,4 +1,4 @@
-curl "http://localhost:8000/haiku/${ID}/" \
+curl "http://localhost:8000/haikus/${ID}/" \
   --include \
   --request PATCH \
   --header "Content-Type: application/json" \
