@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 class Haiku(models.Model):
+    title = models.CharField(max_length=15)
     fiveone = models.CharField(max_length=18)
     seven = models.CharField(max_length=24)
     fivetwo = models.CharField(max_length=18)
