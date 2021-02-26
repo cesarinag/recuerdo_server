@@ -3,13 +3,16 @@ from rest_framework.response import Response
 from rest_framework import generics, status
 from django.shortcuts import get_object_or_404
 from django.middleware.csrf import get_token
+from rest_framework.permissions import IsAuthenticated
 
 from ..models.haiku import Haiku
 from ..serializers import HaikuSerializer
 
 class Haikus(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticated,)
     serializer_class = HaikuSerializer
     def get(self, request):
+            # haikus = Haiku.objects.all()
         haikus = Haiku.objects.filter(owner=request.user.id)
         data = HaikuSerializer(haikus, many=True).data
         return Response({ 'haikus': data })
@@ -19,19 +22,20 @@ class Haikus(generics.ListCreateAPIView):
         print(request.data)
         haiku = HaikuSerializer(data=request.data['haiku'])
         if haiku.is_valid():
-            h = haiku.save()
-            return Response(haiku.data, status=status.HTTP_201_CREATED)
+            haiku.save()
+            return Response({ 'haiku': haiku.data }, status=status.HTTP_201_CREATED)
         else:
             return Response(haiku.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class HaikuDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAuthenticated,)
     def get(self, request, pk):
         haiku = get_object_or_404(Haiku, pk=pk)
         if not request.user.id == haiku.owner.id:
             raise PermissionDenied('Permissions Error: This is not your haiku.')
         data = HaikuSerializer(haiku).data
-        return Response(data)
+        return Response({ 'haiku': data })
 
     def delete(self, request, pk):
         haiku = get_object_or_404(Haiku, pk=pk)

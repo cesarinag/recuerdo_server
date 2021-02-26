@@ -8,7 +8,7 @@ from .models.haiku import Haiku
 class HaikuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Haiku
-        fields = ('id','title', 'fiveone', 'seven', 'fivetwo', 'created_at', 'owner')
+        fields = ('id', 'title', 'fiveone', 'seven', 'fivetwo', 'created_at', 'owner')
 
     # # This create method will be used for model creation
     # def create(self, validated_data):
