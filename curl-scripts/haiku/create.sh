@@ -5,6 +5,7 @@ curl "http://localhost:8000/haikus/" \
   --header "Authorization: Token ${TOKEN}" \
   --data '{
     "haiku": {
+      "title": "'"${TITLE}"'",
       "fiveone": "'"${FO}"'",
       "seven": "'"${SN}"'",
       "fivetwo": "'"${FT}"'"
