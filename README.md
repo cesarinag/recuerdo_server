@@ -3,7 +3,6 @@ welcome to haiku75. a place where you can write haikus with a _challenge_. if yo
 
 ## Useful Links
 
-- (https://github.com/cesarinag/recuerdo_server "Backend Repo")
 - (https://recuerdo-server.herokuapp.com/ "Deployed Backend")
 - (https://cesarinag.github.io/recuerdo_client/ "Deployed Client")
 - (https://github.com/cesarinag/recuerdo_client "Client Repo")
